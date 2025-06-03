@@ -8,21 +8,23 @@ from core.banner import print_banner
 from data.data_backup import backup_data
 from colorama import init, Fore, Style
 
-# Inisialisasi colorama untuk warna terminal
 init(autoreset=True)
 
-# Membaca konfigurasi dari file YAML
 with open("config/settings.yaml", "r") as file:
     config = yaml.safe_load(file)
-    WAIT_TIME_MIN = config["wait_time_min"]  # Waktu tunggu minimal (detik)
-    WAIT_TIME_MAX = config["wait_time_max"]  # Waktu tunggu maksimal (detik)
-    SLEEP_BETWEEN_ACCOUNTS = config["sleep_between_accounts"]  # Jeda antar akun
+    WAIT_TIME_MIN = config["wait_time_min"]
+    WAIT_TIME_MAX = config["wait_time_max"]
+    SLEEP_BETWEEN_ACCOUNTS = config["sleep_between_accounts"]
+    PROXY_ENABLED = config.get("proxy", {}).get("enabled", False)
+    PROXIES = {
+        "http": config.get("proxy", {}).get("http"),
+        "https": config.get("proxy", {}).get("https"),
+    } if PROXY_ENABLED else None
 
 def main():
-    print_banner()  # Menampilkan banner
-    backup_data()  # Membuat backup data
+    print_banner()
+    backup_data()
     
-    # Membaca pesan terenkripsi dari file
     encoded_messages = read_encoded_messages()
     if not encoded_messages:
         print(f"{Fore.RED}Akun tidak ditemukan. Mohon masukkan encodedMessage di data.txt{Style.RESET_ALL}")
@@ -32,18 +34,16 @@ def main():
     while True:
         for encoded_message in encoded_messages:
             # Proses login
-            access_token = login(encoded_message)
+            access_token = login(encoded_message, proxies=PROXIES)
             
             if access_token:
-                claim(access_token)  # Klaim poin jika login berhasil
+                claim(access_token, proxies=PROXIES)
             else:
                 print(f"{Fore.RED}Melewati klaim karena login gagal{Style.RESET_ALL}")
             
-            # Jeda sebelum akun berikutnya
             print(f"{Fore.YELLOW}Menunggu {SLEEP_BETWEEN_ACCOUNTS} detik untuk akun berikutnya...{Style.RESET_ALL}")
             time.sleep(SLEEP_BETWEEN_ACCOUNTS)
         
-        # Waktu tunggu acak sebelum loop berikutnya
         wait_time = random.randint(WAIT_TIME_MIN, WAIT_TIME_MAX)
         minutes = wait_time // 60
         seconds = wait_time % 60
