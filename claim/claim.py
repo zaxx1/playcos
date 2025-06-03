@@ -10,11 +10,16 @@ with open("config/urls.yaml", "r") as file:
     urls = yaml.safe_load(file)
     CLAIM_URL = urls["claim_url"]
 
-def claim(access_token):
+def claim(access_token, proxies=None):
     headers = BASE_HEADERS.copy()
     headers["authorization"] = f"Bearer {access_token}"
     try:
-        response = requests.post(CLAIM_URL, headers=headers, json={})
+        response = requests.post(
+            CLAIM_URL,
+            headers=headers,
+            json={},
+            proxies=proxies
+        )
         if response.status_code == 200:
             data = response.json()
             point = data.get("amount", 0)
