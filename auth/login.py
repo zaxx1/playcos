@@ -12,11 +12,11 @@ with open("config/urls.yaml", "r") as file:
     urls = yaml.safe_load(file)
     LOGIN_URL = urls["login_url"]
 
-def login(encoded_message):
+def login(encoded_message, proxies=None):
     payload = {"encodedMessage": encoded_message}
     headers = BASE_HEADERS.copy()
     try:
-        response = requests.post(LOGIN_URL, headers=headers, json=payload)
+        response = requests.post(LOGIN_URL, headers=headers, json=payload, proxies=proxies)
         if response.status_code == 200:
             data = response.json()
             access_token = data.get("accessToken")
