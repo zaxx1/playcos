@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 from colorama import Fore, Style
 
 def backup_data():
@@ -10,5 +10,5 @@ def backup_data():
             backup_file.write(data)
         return True
     except Exception as e:
-        print(f"{Fore.RED}エラー: バックアップに失敗しました: {str(e)}{Style.RESET_ALL}")
+        print(f"{Fore.RED}Error: Gagal membuat backup: {str(e)}{Style.RESET_ALL}")
         return False
