@@ -1,0 +1,2 @@
+login_url: "https://api.cross-play.xyz/users/login"
+claim_url: "https://api.cross-play.xyz/users/golds/claim"

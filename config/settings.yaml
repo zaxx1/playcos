@@ -1,0 +1,3 @@
+wait_time_min: 300
+wait_time_max: 540
+sleep_between_accounts: 5
