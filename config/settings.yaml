@@ -2,6 +2,6 @@ wait_time_min: 300
 wait_time_max: 540
 sleep_between_accounts: 5
 proxy:
-  enabled: true
-  http: "http://1b437fea84c622d279b9:02b52340f164f9d3@177.54.154.87:823"
-  https: "http://1b437fea84c622d279b9:02b52340f164f9d3@177.54.154.87:823"
+  enabled: false
+  http: ""
+  https: ""
